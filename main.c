@@ -148,7 +148,6 @@ void inserir_disciplina(lista_disciplinas *listadisciplinas, int codigo, int cre
 
 void inserir_cadastroad(lista_cadastroad *listacadastroad, char *periodo, aluno *og_aluno, disciplina *og_disciplina)
 {
-
     cadastroAD *novo_cadastroAD = malloc(sizeof *novo_cadastroAD);
 
     strcpy(novo_cadastroAD->num_periodo, periodo);
@@ -307,6 +306,8 @@ void print_discsaluno(cadastroAD *cadastro, aluno *og_aluno, char *num_periodo)
 
 void print_alunos(lista_alunos *listaalunos)
 {
+    system("cls");
+
     aluno *tmp = listaalunos->head;
 
     printf("\n\t\t\t\t--- Todos os alunos matriculados ---\n");
@@ -314,7 +315,6 @@ void print_alunos(lista_alunos *listaalunos)
     while (tmp != NULL)
     {
         printf("\n\t\t\t\t=> Aluno %s | Codigo %d | CPF %s", tmp->nome, tmp->codigo, tmp->cpf);
-
         tmp = tmp->next;
     }
 
@@ -323,6 +323,8 @@ void print_alunos(lista_alunos *listaalunos)
 
 void print_disciplinas(lista_disciplinas *listadisciplinas)
 {
+    system("cls");
+
     disciplina *tmp = listadisciplinas->head;
 
     printf("\n\t\t\t\t--- Todas as disciplinas ministradas ---\n");
@@ -336,37 +338,6 @@ void print_disciplinas(lista_disciplinas *listadisciplinas)
 
     printf("\n\n\n");
 }
-
-/*void remover_alunodisc(lista_cadastroad *listacadastro, char *num_periodo, aluno *og_aluno, disciplina *og_disciplina)
-{
-    cadastroAD *tmp = listacadastro->head;
-    cadastroAD *rem = NULL;
-
-    if (tmp != NULL && tmp->next!=NULL && (listacadastro->head->aluno == og_aluno || listacadastro->head->disciplina == og_disciplina || listacadastro->head->num_periodo == num_periodo))
-    {
-        rem = listacadastro->head;
-        listacadastro->head = rem->next;
-    }
-    else
-    {
-        while (tmp != NULL && tmp->next != NULL && tmp->next->aluno != og_aluno && tmp->next->disciplina != og_disciplina && tmp->next->num_periodo != num_periodo)
-        {
-            tmp = tmp->next;
-        }
-
-        if (tmp != NULL && tmp->next != NULL)
-        {
-            rem = tmp->next;
-            tmp->next = rem->next;
-        }
-
-        if (rem)
-        {
-            free(rem);
-            listacadastro->tamanho--;
-        }
-    }
-}*/
 
 void salvar_dados(lista_alunos listaalunos, lista_disciplinas listadisciplinas, lista_cadastroad listacadastroad)
 {
@@ -401,7 +372,10 @@ void salvar_dados(lista_alunos listaalunos, lista_disciplinas listadisciplinas, 
         cadastro_tmp = cadastro_tmp->next;
     }
     fclose(arquivo);
-    printf("\n\t\t\t\t***Dados salvos com sucesso***\n\n\n");
+
+    system("cls");
+
+    printf("\n\t\t\t\t***Dados salvos com sucesso***\n");
 }
 
 void recuperar_dados(lista_alunos *listaalunos, lista_disciplinas *listadisciplinas, lista_cadastroad *listacadastroad)
@@ -452,11 +426,11 @@ void recuperar_dados(lista_alunos *listaalunos, lista_disciplinas *listadiscipli
 
     for(int i = 0; i < alunos_tamanho - 1; i++)
     {
-        fscanf(narquivo, "%[^;];%d;%s", nome_al, &codigo_al, cpf);
+        fscanf(narquivo, "%[^;];%d;%s\n", nome_al, &codigo_al, cpf);
         inserir_aluno(listaalunos, codigo_al, nome_al, cpf);
+        aluno *debug_aluno = buscar_aluno(listaalunos, codigo_al);
     }
 
-    fgets(buffer, 200, narquivo);
     fgets(buffer, 200, narquivo);
 
     for(int i = 0; i < disciplinas_tamanho; i++)
@@ -478,6 +452,8 @@ void recuperar_dados(lista_alunos *listaalunos, lista_disciplinas *listadiscipli
 
     fclose(narquivo);
 
+    system("cls");
+
     printf("\n\t\t\t\t***Dados recuperados com sucesso***\n");
 }
 
@@ -492,11 +468,10 @@ void menu()
     printf("\t\t\t\t5. Consultar todos os alunos matriculados\n");
     printf("\t\t\t\t6. Consultar disciplinas cursadas por um aluno\n");
     printf("\t\t\t\t7. Consultar todas as disciplinas ministradas\n");
-    printf("\t\t\t\t8. Remover aluno de uma disciplina\n");
-    printf("\t\t\t\t9. Remover o cadastro de um aluno\n");
-    printf("\t\t\t\t10. Remover o cadastro de uma disciplina\n");
-    printf("\t\t\t\t11. Salvar dados\n");
-    printf("\t\t\t\t12. Recuperar dados\n");
+    printf("\t\t\t\t8. Remover o cadastro de um aluno\n");
+    printf("\t\t\t\t9. Remover o cadastro de uma disciplina\n");
+    printf("\t\t\t\t10. Salvar dados\n");
+    printf("\t\t\t\t11. Recuperar dados\n");
     printf("\t\t\t\t__________________________________________________\n");
     printf("\t\t\t\tDigite a opcao desejada: ");
 }
@@ -684,11 +659,6 @@ int main()
 
         case 8:
         {
-
-        } break;
-
-        case 9:
-        {
             int codigo = 0;
 
             printf("\n\t\t\t\tDigite o codigo do aluno: ");
@@ -707,7 +677,7 @@ int main()
             else printf("\n\t\t\t\t***Nao ha aluno com esse codigo!***\n");
         } break;
 
-        case 10:
+        case 9:
         {
             int codigo = 0;
 
@@ -725,12 +695,12 @@ int main()
             else printf("\n\t\t\t\t***Nao ha disciplina com esse codigo!***\n\n\n");
         } break;
 
-        case 11:
+        case 10:
         {
             salvar_dados(listaalunos, listadisciplinas, listacadastroad);
         } break;
 
-        case 12:
+        case 11:
         {
             recuperar_dados(&listaalunos, &listadisciplinas, &listacadastroad);
         } break;
